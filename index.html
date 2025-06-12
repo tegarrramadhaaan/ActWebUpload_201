@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <title>Unggah File</title>
+    <style>
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f6f8fa;
+        margin: 0;
+        padding: 40px;
+      }
+      .container {
+        max-width: 600px;
+        background: white;
+        margin: auto;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+      input[type="file"] {
+        display: block;
+        margin: 20px auto;
+        border: 2px dashed #ccc;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        text-align: center;
+      }
+      input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: block;
+        width: 100%;
+        font-size: 16px;
+        margin-top: 20px;
+      }
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+      #previewContainer {
+          text-align: center;
+      }
+      #previewImg, #previewPdf {
+        display: none;
+        max-width: 100%;
+        margin-top: 20px;
+        border-radius: 10px;
+        border: 1px solid #eee;
+      }
+      #previewPdf {
+        width: 100%;
+        height: 500px;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Unggah File Anda</h2>
+        <p style="text-align:center; color:#666;">Pilih file gambar (JPG, PNG, GIF) atau PDF untuk diunggah.</p>
+        <form action="upload.php" method="post" enctype="multipart/form-data">
+            <input type="file" name="fileToUpload" id="fileToUpload" accept="image/*,application/pdf" onchange="previewFile()" required />
+            
+            <div id="previewContainer">
+                <img id="previewImg" src="#" alt="Preview Gambar" />
+                <iframe id="previewPdf"></iframe>
+            </div>
+
+            <input type="submit" value="Unggah File" name="submit" />
+        </form>
+    </div>
+
+    <script>
+      function previewFile() {
+        const fileInput = document.getElementById("fileToUpload");
+        const file = fileInput.files[0];
+        const previewImg = document.getElementById("previewImg");
+        const previewPdf = document.getElementById("previewPdf");
+
+        previewImg.style.display = "none";
+        previewPdf.style.display = "none";
+
+        if (!file) return;
+
+        const fileType = file.type;
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+          if (fileType.startsWith("image/")) {
+            previewImg.src = reader.result;
+            previewImg.style.display = "block";
+          } else if (fileType === "application/pdf") {
+            previewPdf.src = reader.result;
+            previewPdf.style.display = "block";
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    </script>
+</body>
+</html>
